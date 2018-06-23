@@ -1,0 +1,16 @@
+Django==2.0.6
+django-ranged-response==0.2.0
+django-simple-captcha==0.5.6
+html5lib==1.0b10
+httplib2==0.11.3
+Pillow==5.1.0
+pip==9.0.3
+psycopg2==2.7.3.2
+PyPDF2==1.26.0
+pytz==2017.3
+reportlab==3.4.0
+setuptools==20.7.0
+six==1.11.0
+webencodings==0.5.1
+xhtml2pdf==0.2.1
+gunicorn==19.7.1

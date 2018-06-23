@@ -1,0 +1,28 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+<link rel="stylesheet" type="text/css" href="{% static 'djsite/styles/style.css' %}" />
+    <title>{% block title %}My amazing site{% endblock %}</title>
+</head>
+
+<body>
+<h1>Welcome to Django Training</h1>
+
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog/">Blog</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

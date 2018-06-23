@@ -1,0 +1,129 @@
+{% extends "layout/master.html" %}
+{% load static %}
+{% block title %}All Contacts{% endblock %}
+
+{% block content %}
+
+<div id="all-contacts-page">
+
+<h3>My Contacts</h3>
+<hr>
+
+    <!--Show notification/error messages here -->
+    {% if success_msg %}
+        {% include "layout/success_msg.html" %}
+    {% elif error_msg %}
+        {% include "layout/error_msg.html" %}
+    {% endif %}
+
+<div style="margin-bottom: 20px">
+  <a href="{% url 'contacts:add' %}" class="btn btn-sm btn-primary">Add Contact</a>&nbsp;
+  <a href="{% url 'contacts:report' %}" class="btn btn-sm btn-primary">PDF Report</a>&nbsp;
+
+    <span href="#" class="dropdown">
+      <a href="#" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">Export</a>
+
+      <ul class="dropdown-menu">
+          <li>
+            <a onClick ="doExport({type:'csv',ignoreColumn:'[5,6,7]'});" href="#"> 
+              <img src="{% static "images/tableExport/csv.png" %}" /> CSV
+            </a>          
+          </li>
+          <li>
+            <a onClick ="doExport({type:'txt'});" href="#">
+              <img src="{% static "images/tableExport/txt.png" %}" /> TXT
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'json'});" href="#">
+              <img src="{% static "images/tableExport/json.png" %}" /> JSON
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'json',ignoreColumn:'[5,6,7]'});" href="#">
+              <img src="{% static "images/tableExport/json.png" %}" /> JSON(igonreColumn)
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'json',escape:'true'});" href="#">
+              <img src="{% static "images/tableExport/json.png" %}" /> JSON(with Escape)
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'xml'});" href="#">
+              <img src="{% static "images/tableExport/xml.png" %}" /> XML
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'sql'});" href="#">
+              <img src="{% static "images/tableExport/sql.png" %}" /> SQL
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'excel',ignoreColumn:'[5,6,7]'});" href="#">
+              <img src="{% static "images/tableExport/xls.png" %}" /> XLS
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'doc'});" href="#">
+              <img src="{% static "images/tableExport/word.png" %}" /> WORD
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'png'});" href="#">
+            <img src="{% static "images/tableExport/png.png" %}" />
+              <?php echo img('tableExport/png.png'); ?>  PNG
+            </a>
+          </li>
+          <li>
+            <a onClick ="doExport({type:'pdf',ignoreColumn:'[5,6,7]'});" href="#">
+               <img src="{% static "images/tableExport/pdf.png" %}" /> PDF
+            </a>
+          </li>
+      </ul>
+
+  </span>
+</div>
+
+	<table id="myTable"  class="table table-striped cell-border table-responsive">
+      <thead>
+         <tr>
+             <th> First Name</th>
+             <th> Middle Name</th>
+             <th> Last Name</th>
+             <th> Email</th>
+             <th> Tel1</th>
+             <th> Tel2</th>
+             <th colspan="3">Actions</th>
+         </tr>
+      </thead>
+          <tbody>
+            {% for contact in contacts %}              
+                <tr>
+                    <td> {{contact.firstname}} </td>
+                    <td> {{contact.middlename}} </td>
+                    <td> {{contact.lastname}} </td>
+                    <td> {{contact.email}} </td>
+                    <td> {{contact.tel1}} </td>
+                    <td> {{contact.tel2}} </td>
+                    <td><a href="{% url 'contacts:sendmail' contact.id %}" class="glyphicon glyphicon-envelope"> Send Email</a></td>
+                    <td><a href="{% url 'contacts:edit' contact.id %}" class="glyphicon glyphicon-edit"> Edit</a></td>
+                    <td><a href="{% url 'contacts:delete' contact.id %}" class="glyphicon glyphicon-trash"> Delete</a></td>                 
+                </tr>
+            {% endfor %}
+          </tbody>
+      <tfoot>
+         <tr>
+             <th> First Name</th>
+             <th> Middle Name</th>
+             <th> Last Name</th>
+             <th> Email</th>
+             <th> Tel1</th>
+             <th> Tel2</th>
+             <th colspan="3">Actions</th>
+         </tr>
+      </tfoot>
+    </table>
+
+</div>
+{% endblock %}
