@@ -7,3 +7,7 @@ from django.shortcuts import render,get_object_or_404
 class UPNView(View):	
 	def get(self, request, upn, acc_num, pk):
 		return HttpResponse("UPN=%s  Acc#=%s   PK=%d" % (upn,acc_num,pk));
+
+
+def testit(request):
+	return HttpResponse("hello from testit")

@@ -41,24 +41,24 @@ class UserProfile(models.Model):
 		super(UserProfile, self).save(*args, **kwargs)
 
 
-		# now handle photo upload,resize it and move it to the static userphotos directory
+		# now handle photo upload,resize it and move it to the media/images userphotos directory
 		if self.photo:
 			image = Image.open(self.photo.path)
 			resizedImage = image.resize((200, 200), Image.ANTIALIAS)
 			resizedImage.save(self.photo.path)
 			sourcepath = self.photo.path
-			destination_path = os.path.join(settings.BASE_DIR, 'static') + "/images/userphotos/" + self.photo.name
+			destination_path = os.path.join(settings.BASE_DIR, 'media') + "/images/" + self.photo.name
 			shutil.move(sourcepath, destination_path)
 
 			# now delete old user photo from the userphotos directory if only its not the default photo
 			if self.old_photo_filename != "" and self.old_photo_filename != "default" and self.old_photo_filename is not None:
-				filepath = os.path.join(settings.BASE_DIR, 'static') + "/images/userphotos/" + self.old_photo_filename
+				filepath = os.path.join(settings.BASE_DIR, 'media') + "/images/" + self.old_photo_filename
 				if( exists(filepath) ):
 					os.remove(filepath)
 
 
 	def image_tag(self):
-		return u'<img src="/static/images/userphotos/%s" />' % (self.photo.name)
+		return u'<img src="/media/images/%s" />' % (self.photo.name)
 	image_tag.short_description = 'Image'
 	image_tag.allow_tags = True
 

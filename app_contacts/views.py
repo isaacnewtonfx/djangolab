@@ -14,6 +14,8 @@ from xhtml2pdf import pisa
 import datetime
 import os
 from pprint import pprint
+from django.conf import settings
+from django.core.files.storage import default_storage
 
 
 class IndexView(View):
@@ -180,15 +182,21 @@ class EmailView(View):
 
 
 def ReportView(request):
-	
+
 	today = datetime.datetime.today()
 	contacts = request.user.contact_set.all()
-	data = {'today':today, 'contacts':contacts}
+
+	#request.scheme               # http or https
+    #request.META['HTTP_HOST']    # example.com
+    #request.path                 # /some/content/1/
+	domain = request.scheme + "://" + request.META['HTTP_HOST']
+
+	data = {'today':today, 'contacts':contacts, 'domain' : domain}
 
 	template = get_template('reports/all_contacts.html')
 	html  = template.render(data)
 
-	file = open('report.pdf', "w+b")
+	file = default_storage.open(os.path.join(settings.MEDIA_ROOT, 'files/report.pdf'), 'w+b')
 	pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,encoding='utf-8')
 
 	file.seek(0)

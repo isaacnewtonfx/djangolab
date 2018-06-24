@@ -70,7 +70,7 @@
             <label for="photo">Upload Photo (5Mb Max) </label>              
             {% if form.photo %}{{ form.photo }}{% else %}{{ form.photo }}{% endif %}
             <div class="img-container">
-                <img id="userPhoto2" class="img-rounded img-responsive" alt="photo" src="{% static '' %}images/userphotos/{{user.profile.photo.name}}" />
+                <img id="userPhoto2" class="img-rounded img-responsive" alt="photo" src="/media/images/{{user.profile.photo.name}}" />
 
                 <span class="btn btn-default btn-sm clrPhoto">Clear Photo</span>
                 <small class="alert-danger">{{ form.photo.errors }}</small>

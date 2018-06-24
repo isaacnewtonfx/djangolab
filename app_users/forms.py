@@ -125,13 +125,15 @@ class PersonalDetailsForm(forms.Form):
     # validate unique email
     def clean_email(self):
         user = self.request.user
-        retrieved_user = User.objects.filter(email__iexact=self.cleaned_data['email'])[0]
 
-        if retrieved_user:
-            if retrieved_user.id != user.id:
-                # The email belongs to someone other than the logged_in user
-                raise forms.ValidationError(_("The email already exists. Please try another one."))
-            return self.cleaned_data['email']
+        if User.objects.filter(email__iexact=self.cleaned_data['email']).exists():
+            retrieved_user = User.objects.filter(email__iexact=self.cleaned_data['email'])[0]
+
+            if retrieved_user:
+                if retrieved_user.id != user.id:
+                    # The email belongs to someone other than the logged_in user
+                    raise forms.ValidationError(_("The email already exists. Please try another one."))
+                return self.cleaned_data['email']
         return self.cleaned_data['email']
 
 

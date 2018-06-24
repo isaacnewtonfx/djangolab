@@ -133,6 +133,11 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Media is for any user upload files(img,pdf,videos etc)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/var/www/contacts.test/media/'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
