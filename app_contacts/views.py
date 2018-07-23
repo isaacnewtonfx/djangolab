@@ -25,7 +25,7 @@ class IndexView(View):
 		# function level authorization
 		if(request.user.has_perm('app_contacts.view_contact') == False):
 			referer = request.META['HTTP_REFERER']
-			return HttpResponse("<h4>Sorry, you don't have permission to view. <a href=%s>Return</a></h4>" % referer)
+			return HttpResponse("<h4>Sorry, you don't have permission to view. <a href=%s>Return</a></h4>" % referer )
 
 		# get session data if available
 		success_msg,error_msg = shared_module.get_session_msgs(request)
@@ -39,10 +39,9 @@ class IndexView(View):
 class AddView(View):
 
 	def get(self, request):
-
 		if(request.user.has_perm('app_contacts.add_contact') == False):
 			referer = request.META['HTTP_REFERER']
-			return HttpResponse("<h4>Sorry, you don't have permission to add. <a href=%s>Return</a></h4>" % referer)
+			return HttpResponse("<h4>Sorry, you don't have permission to add. <a href=%s>Return</a></h4>" % referer )
 
 
 		# get session data if available
@@ -52,9 +51,9 @@ class AddView(View):
 		return render(request, 'mycontacts/add.html', data)
 
 	def post(self,request):
-
 		if(request.user.has_perm('app_contacts.add_contact') == False):
-			return HttpResponse("<h4>Sorry, you don't have permission to add</h4>")
+			referer = request.META['HTTP_REFERER']
+			return HttpResponse("<h4>Sorry, you don't have permission to add. <a href=%s>Return</a></h4>" % referer )
 
 
 		ContactModel = Contact(user = request.user)

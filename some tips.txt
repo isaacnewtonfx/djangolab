@@ -159,7 +159,16 @@ THINGS I HAVE LEARNT
 """
 
 
+DEVELOPING A SPA OR MPA, THE ARCHITECTURE AND HOW TO PROPERLY HANDLE USER SESSION DATA
+============================================================================================
 
+https://www.academind.com/learn/vue-js/vue-q-a/
+https://dev.to/rdegges/please-stop-using-local-storage-1i04
+https://stackoverflow.com/questions/49480548/vue-js-django-app-architecture
+https://laracasts.com/discuss/channels/vue/how-do-i-handle-loginregistration-and-sessions-with-vue-router-and-axios-for-an-spa
+https://www.youtube.com/watch?v=926mknSW9Lo
+https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
+https://www.youtube.com/watch?v=oXxbB5kv9OA
 
 
 

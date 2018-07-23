@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+
 def get_session_msgs(request):
 
     # get session data if available
