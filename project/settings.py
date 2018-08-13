@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'app_users',
     'app_shared',
     'app_contacts',
-    'app_userprofile',
     'app_services',
     'app_world',
     'app_test'

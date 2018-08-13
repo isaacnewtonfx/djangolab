@@ -61,7 +61,7 @@ class LoginView(View):
                     error_msg = "Sorry, this user is inactive"
                     return render(request, 'users/public_login.html', {'loginform': form,'error_msg':error_msg})
             else:
-                error_msg = "invalid username or password"
+                error_msg = "invalid credentials or inactive user"
                 return render(request, 'users/login.html', {'loginform': form,'error_msg':error_msg})
             return HttpResponseRedirect('/')
         else:
@@ -219,7 +219,11 @@ class ManagePersonalDetailsView(View):
             old_photo_filename = user_profile.photo.name
             user_profile.middlename = form.cleaned_data['middlename']
             user_profile.phone = form.cleaned_data['phone']
-            user_profile.photo = request.FILES['photo'] if 'photo' in request.FILES else None
+            if 'photo' in request.FILES:
+                user_profile.photo = request.FILES['photo']
+                user_profile.photoUploadStatus = True
+            else:
+                user_profile.photoUploadStatus = False
             
 
             # Save all changes
