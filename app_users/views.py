@@ -221,9 +221,9 @@ class ManagePersonalDetailsView(View):
             user_profile.phone = form.cleaned_data['phone']
             if 'photo' in request.FILES:
                 user_profile.photo = request.FILES['photo']
-                user_profile.photoUploadStatus = True
+                user_profile.hasPhotoUpload = True
             else:
-                user_profile.photoUploadStatus = False
+                user_profile.hasPhotoUpload = False
             
 
             # Save all changes

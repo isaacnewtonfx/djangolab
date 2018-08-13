@@ -31,7 +31,7 @@ class UserProfile(models.Model):
 	def __init__(self, *args, **kwargs):
 		super(UserProfile,self).__init__(*args, **kwargs)
 		self.old_photo_filename = self.photo.name
-		self.photoUploadStatus = False
+		self.hasPhotoUpload = False
 
 	# Override the save functionality to handle photo resizing
 	def save(self, *args, **kwargs):
@@ -41,7 +41,7 @@ class UserProfile(models.Model):
 
 
 		# now handle photo upload,resize it and move it to the media/images userphotos directory
-		if self.photoUploadStatus==True:
+		if self.hasPhotoUpload:
 			image = Image.open(self.photo.path)
 			resizedImage = image.resize((200, 200), Image.ANTIALIAS)
 			resizedImage.save(self.photo.path)
