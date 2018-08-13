@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'password_reset',
     'app_homepage',
     'app_users',
-    'app_shared',
     'app_contacts',
     'app_services',
     'app_world',

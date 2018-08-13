@@ -9,12 +9,10 @@
 <h3>My Contacts</h3>
 <hr>
 
-    <!--Show notification/error messages here -->
-    {% if success_msg %}
-        {% include "layout/success_msg.html" %}
-    {% elif error_msg %}
-        {% include "layout/error_msg.html" %}
-    {% endif %}
+  <!--Show notification/error messages here -->
+  {% if messages %}
+		{% include "layout/messages.html" %}
+	{% endif %}
 
 <div style="margin-bottom: 20px">
   <a href="{% url 'contacts:add' %}" class="btn btn-sm btn-primary">Add Contact</a>&nbsp;

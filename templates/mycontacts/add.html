@@ -11,11 +11,9 @@
 <hr/>
 
     <!--Show notification/error messages here -->
-    {% if success_msg %}
-        {% include "layout/success_msg.html" %}
-    {% elif error_msg %}
-        {% include "layout/error_msg.html" %}
-    {% endif %}
+	{% if messages %}
+		{% include "layout/messages.html" %}
+	{% endif %}
 
 
 <form class="row" method="post" action="{% url 'contacts:add' %}">

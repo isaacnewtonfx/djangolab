@@ -7,7 +7,6 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail,EmailMessage
 from django.template.loader import get_template
 from django.template import Context
-from app_shared import shared_module
 from . forms import ContactForm,EmailForm
 from . models import Contact
 from xhtml2pdf import pisa
@@ -16,6 +15,7 @@ import os
 from pprint import pprint
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.contrib import messages
 
 
 class IndexView(View):
@@ -27,12 +27,9 @@ class IndexView(View):
 			referer = request.META['HTTP_REFERER']
 			return HttpResponse("<h4>Sorry, you don't have permission to view. <a href=%s>Return</a></h4>" % referer )
 
-		# get session data if available
-		success_msg,error_msg = shared_module.get_session_msgs(request)
-
 		# get all contacts for this user
 		contacts = request.user.contact_set.all()
-		data = {'contacts':contacts,'success_msg':success_msg,'error_msg':error_msg}
+		data = {'contacts':contacts}
 		return render(request, 'mycontacts/index.html', data)
 
 
@@ -43,12 +40,7 @@ class AddView(View):
 			referer = request.META['HTTP_REFERER']
 			return HttpResponse("<h4>Sorry, you don't have permission to add. <a href=%s>Return</a></h4>" % referer )
 
-
-		# get session data if available
-		success_msg,error_msg = shared_module.get_session_msgs(request)
-
-		data = {'success_msg':success_msg, 'error_msg':error_msg}
-		return render(request, 'mycontacts/add.html', data)
+		return render(request, 'mycontacts/add.html')
 
 	def post(self,request):
 		if(request.user.has_perm('app_contacts.add_contact') == False):
@@ -62,7 +54,7 @@ class AddView(View):
 		if form.is_valid():		
 
 			form.save()
-			request.session['success_msg'] = "Contact added successfully.You may add more"
+			messages.add_message(request, messages.SUCCESS, "Contact added successfully.You may add more")
 			return HttpResponseRedirect('/contacts/add')
 
 		else:
@@ -83,7 +75,7 @@ class EditView(View):
 		
 
 		# prepare data
-		data = {'success_msg':success_msg, 'error_msg':error_msg, 'contactform':form, 'ContactID':pk}
+		data = {'contactform':form, 'ContactID':pk}
 
 		return render(request, 'mycontacts/edit.html',data)	
 
@@ -93,7 +85,7 @@ class EditView(View):
 
 		if form.is_valid():
 			form.save()
-			request.session['success_msg'] = "Contact updated successfully"
+			messages.add_message(request, messages.SUCCESS, "Contact updated successfully")
 			return HttpResponseRedirect('/contacts/index')
 		else:
 			return render(request, 'mycontacts/edit.html', {'contactform': form, 'ContactID':pk})
@@ -119,7 +111,7 @@ class DeleteView(View):
 	def post(self, request, pk):
 
 		if request.POST['option'] == "no":
-			request.session['success_msg'] = "Action was cancelled"
+			messages.add_message(request, messages.SUCCESS, "Action was cancelled")
 			return HttpResponseRedirect('/contacts/index')
 		else:
 
@@ -133,7 +125,7 @@ class DeleteView(View):
 			ContactModel.delete()
 
 			#put a success message in the session
-			request.session['success_msg'] = "%s was deleted successfully" % name
+			messages.add_message(request, messages.SUCCESS, "%s was deleted successfully" % name)
 
 			#redirect to the index page
 			return HttpResponseRedirect('/contacts/index')
@@ -141,9 +133,6 @@ class DeleteView(View):
 
 class EmailView(View):
 	def get(self, request, pk):
-
-		# get session data if available
-		success_msg,error_msg = shared_module.get_session_msgs(request)
 
 		#get the contact from the database
 		contact = Contact.objects.get(pk = pk)

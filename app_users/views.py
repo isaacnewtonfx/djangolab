@@ -1,4 +1,3 @@
-from app_shared import shared_module
 from django.http import HttpResponse,HttpResponseRedirect,Http404
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth import authenticate, login,logout
@@ -9,8 +8,8 @@ from . forms import LoginForm,RegistrationForm,ChangePasswordForm,PersonalDetail
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.utils.decorators import method_decorator
-#from app_userprofile.models import UserProfile
 import datetime,os,shutil
+from django.contrib import messages
 
 
 
@@ -31,11 +30,7 @@ import datetime,os,shutil
 
 class LoginView(View):
     def get(self,request):  
-
-        # get session data if available
-        success_msg,error_msg = shared_module.get_session_msgs(request)
-        data = {'success_msg':success_msg,'error_msg':error_msg}
-        return render(request, 'users/login.html', data)
+        return render(request, 'users/login.html')
 
 
     def post(self,request):
@@ -58,11 +53,11 @@ class LoginView(View):
                     login(request,user) 
                     return HttpResponseRedirect('/')
                 else:
-                    error_msg = "Sorry, this user is inactive"
-                    return render(request, 'users/public_login.html', {'loginform': form,'error_msg':error_msg})
+                    messages.add_message(request, messages.ERROR, "Sorry, this user is inactive")
+                    return render(request, 'users/public_login.html', {'loginform': form})
             else:
-                error_msg = "invalid credentials or inactive user"
-                return render(request, 'users/login.html', {'loginform': form,'error_msg':error_msg})
+                messages.add_message(request, messages.ERROR, "invalid credentials or inactive user")
+                return render(request, 'users/login.html', {'loginform': form})
             return HttpResponseRedirect('/')
         else:
         	return render(request, 'users/login.html', {'loginform': form})
@@ -71,7 +66,7 @@ class LoginView(View):
 class LogoutView(View):
     def get(self,request):
         logout(request)
-        request.session['success_msg'] = "You are now logged out"
+        messages.add_message(request, messages.SUCCESS, "You are now logged out")
         return HttpResponseRedirect('/users/login')
 
 
@@ -123,8 +118,8 @@ class RegistrationView(View):
             user_profile.photo = request.FILES['photo'] if 'photo' in request.FILES else None
             user_profile.save()
 
-            request.session['success_msg'] = "Registration Successful. Your account has now been created"
-
+            messages.add_message(request, messages.SUCCESS, "Registration Successful. Your account has now been created")
+            
             return HttpResponseRedirect('/')
         else:
             return render(request, 'users/register.html', {'regform': form})
@@ -132,21 +127,13 @@ class RegistrationView(View):
 
 class ManageView(View):
     def get(self,request):
-
-        # get session data if available
-        success_msg,error_msg = shared_module.get_session_msgs(request)
-        data = {'success_msg':success_msg,'error_msg':error_msg}
-
-        return render(request, 'users/manage.html', data)
+        return render(request, 'users/manage.html')
 
 
 class ChangeUserPasswordView(View):
     def get(self,request):
 
-        # get session data if available
-        success_msg,error_msg = shared_module.get_session_msgs(request)
-        data = {'show_change_password':True,'success_msg':success_msg,'error_msg':error_msg}
-
+        data = {'show_change_password':True}
         return render(request, 'users/manage.html', data)
 
 
@@ -169,7 +156,7 @@ class ChangeUserPasswordView(View):
             login(request, user) 
 
             # return to change password page with success message
-            request.session['success_msg'] = "Password was changed Successfully"
+            messages.add_message(request, messages.SUCCESS, "Password was changed Successfully")
             return HttpResponseRedirect('/users/manage/')
 
         else:
@@ -192,11 +179,7 @@ class ManagePersonalDetailsView(View):
 
         #we need to pass an empty form because of the captcha field
         form = PersonalDetailsForm(initial = initial_data)
-      
-
-        # get session data if available
-        success_msg,error_msg = shared_module.get_session_msgs(request)
-        data = {'form':form,'show_personal_details':True,'success_msg':success_msg,'error_msg':error_msg}
+        data = {'form':form,'show_personal_details':True}
 
         return render(request, 'users/manage.html', data)
 
@@ -230,7 +213,7 @@ class ManagePersonalDetailsView(View):
             user.save()      
             user_profile.save()
 
-            request.session['success_msg'] = "Updated Successfully"
+            messages.add_message(request, messages.SUCCESS, 'Updated Successfully')
 
             return HttpResponseRedirect('/users/manage/')
             
