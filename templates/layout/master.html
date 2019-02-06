@@ -8,26 +8,15 @@
 		<title>{% block title %}Homepage{% endblock %}</title>
 
 		<!-- bootstrap -->
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap/bootstrap.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap/bootstrap.css' %}" />
 
-		<!-- data tables -->
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/dataTables/jquery.dataTables.css' %}" />
-
-		<!-- anything slider -->
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/anythingslider/theme-metallic.css' %}" />
-
-		<!--circle hover-->
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/circlehover/circle-hover.css' %}" />
-
-		<!--textillate-->
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/textillate/animate.css' %}" />
-
+		{% block extra_styles %}{% endblock %}
 
 		<!--site css-->
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/site.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/tablet_and_up.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/desktop_and_up.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'styles/large_desktops_and_up.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/tablet_and_up.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/desktop_and_up.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/large_desktops_and_up.css' %}" />
 </head>
 	
 	<body>
@@ -42,7 +31,7 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="{% url 'homepage:index' %}">
-						<img style="display:inline;height:40px;width:40px" src="{% static 'images/sword.png' %}" alt="BrandName" /> DjangoBlade
+						<img style="display:inline;height:40px;width:40px" src="{% static 'img/sword.png' %}" alt="BrandName" /> DjangoBlade
 					</a>
 				</div>
 
@@ -105,10 +94,10 @@
 
 						{% if unique_photo_filename %}
 							<img alt="No Photo" id="acctphoto" class="img-responsive" 
-							src="{% static "images/uploads/%s" % {{unique_photo_filename}} %}">
+							src="{% static "img/uploads/%s" % {{unique_photo_filename}} %}">
 						{% else %}
 							<img alt="No Photo" id="acctphoto" class="img-responsive" 
-							src="{% static "images/usericon.svg" %}">	
+							src="{% static "app_users/img/usericon.svg" %}">	
 						{% endif %}
 
 					</div>
@@ -133,45 +122,13 @@
 <!--	<div class="visible-md"> now in md</div>-->
 <!--	<div class="visible-lg"> now in lg</div>-->
 
-	<script type="text/javascript" src="{% static 'javascripts/jquery-1.11.1.js' %}" ></script>	
-	<script type="text/javascript" src="{% static 'javascripts/bootstrap/bootstrap.js' %}" ></script>
-	<script type="text/javascript" src="{% static 'javascripts/dataTables/jquery.dataTables.js' %}" ></script>
-
-
-	<!--table Export-->
-	<script type="text/javascript" src="{% static 'javascripts/tableExport/tableExport.js' %}" ></script>
-	<script type="text/javascript" src="{% static 'javascripts/tableExport/libs/FileSaver/FileSaver.min.js' %}" ></script>
-	<script type="text/javascript" src="{% static 'javascripts/tableExport/libs/html2canvas/html2canvas.min.js' %}" ></script>
-	<script type="text/javascript" src="{% static 'javascripts/tableExport/libs/jsPDF/jspdf.min.js' %}" ></script>
-
-
-	<!--anything slider-->
-	<script type="text/javascript" src="{% static 'javascripts/anythingslider/jquery.easing.1.2.js' %}" ></script>
-	<script type="text/javascript" src="{% static 'javascripts/anythingslider/jquery.anythingslider.js' %}" ></script>
-
-
-	<!--textillate-->
-	<script type="text/javascript" src="{% static 'javascripts/textillate/jquery.lettering.js' %}" ></script>
-	<script type="text/javascript" src="{% static 'javascripts/textillate/jquery.textillate.js' %}" ></script>
-
-
-	<!-- cycle -->
-	<script type="text/javascript" src="{% static 'javascripts/cycle/jquery.cycle.all.js' %}" ></script>
-
+	<script type="text/javascript" src="{% static 'js/jquery-1.11.1.js' %}" ></script>	
+	<script type="text/javascript" src="{% static 'js/bootstrap/bootstrap.js' %}" ></script>
 
 	<!--site script-->
-	<script type="text/javascript" src="{% static 'javascripts/site.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/site.js' %}" ></script>
 
-
-	<!--function to do export-->
-	<script>
-		function doExport (params){
-			var options = {tableName: 'All Contacts',
-				worksheetName: 'All Contacts'};
-			$.extend(true, options, params);
-			$('#myTable').tableExport(options);
-		}
-	</script>
+	{% block extra_scripts %}{% endblock %}
 
 	</body>
 </html>

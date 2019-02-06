@@ -30,7 +30,7 @@ class IndexView(View):
 		# get all contacts for this user
 		contacts = request.user.contact_set.all()
 		data = {'contacts':contacts}
-		return render(request, 'mycontacts/index.html', data)
+		return render(request, 'app_contacts/index.html', data)
 
 
 class AddView(View):
@@ -40,7 +40,7 @@ class AddView(View):
 			referer = request.META['HTTP_REFERER']
 			return HttpResponse("<h4>Sorry, you don't have permission to add. <a href=%s>Return</a></h4>" % referer )
 
-		return render(request, 'mycontacts/add.html')
+		return render(request, 'app_contacts/add.html')
 
 	def post(self,request):
 		if(request.user.has_perm('app_contacts.add_contact') == False):
@@ -58,14 +58,11 @@ class AddView(View):
 			return HttpResponseRedirect('/contacts/add')
 
 		else:
-			return render(request, 'mycontacts/add.html', {'contactform': form})
+			return render(request, 'app_contacts/add.html', {'contactform': form})
 
 
 class EditView(View):
 	def get(self, request, pk):
-
-		# get session data if available
-		success_msg,error_msg = shared_module.get_session_msgs(request)
 
 		# get the contact object from the database
 		ContactModel = Contact.objects.get(pk = pk)
@@ -77,7 +74,7 @@ class EditView(View):
 		# prepare data
 		data = {'contactform':form, 'ContactID':pk}
 
-		return render(request, 'mycontacts/edit.html',data)	
+		return render(request, 'app_contacts/edit.html',data)	
 
 	def post(self, request, pk):
 		ContactModel = Contact.objects.get(pk = pk)
@@ -88,7 +85,7 @@ class EditView(View):
 			messages.add_message(request, messages.SUCCESS, "Contact updated successfully")
 			return HttpResponseRedirect('/contacts/index')
 		else:
-			return render(request, 'mycontacts/edit.html', {'contactform': form, 'ContactID':pk})
+			return render(request, 'app_contacts/edit.html', {'contactform': form, 'ContactID':pk})
 
 
 class DeleteView(View):
@@ -138,7 +135,7 @@ class EmailView(View):
 		contact = Contact.objects.get(pk = pk)
 
 		# show the email form
-		return render(request, 'mycontacts/sendmail.html', {'contact':contact})
+		return render(request, 'app_contacts/sendmail.html', {'contact':contact})
 
 	def post(self, request, pk):
 
@@ -166,7 +163,7 @@ class EmailView(View):
 
 			return HttpResponse("form is valid")
 		else:
-			return render(request, 'mycontacts/sendmail.html', {'emailform': form, 'contact':contact})
+			return render(request, 'app_contacts/sendmail.html', {'emailform': form, 'contact':contact})
 
 
 def ReportView(request):
@@ -181,7 +178,7 @@ def ReportView(request):
 
 	data = {'today':today, 'contacts':contacts, 'domain' : domain}
 
-	template = get_template('reports/all_contacts.html')
+	template = get_template('app_contacts/rptAllContacts.html')
 	html  = template.render(data)
 
 	file = default_storage.open(os.path.join(settings.MEDIA_ROOT, 'files/report.pdf'), 'w+b')

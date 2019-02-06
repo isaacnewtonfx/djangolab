@@ -4,15 +4,15 @@ from django.http import HttpResponse
 
 class IndexView(View):
 	def get(self, request):
-  		return render(request, 'homepage/index.html')
+		return render(request, 'app_homepage/index.html')
 
 class AboutView(View):
 	def get(self, request):
-  		return render(request, 'homepage/about.html')
+  		return render(request, 'app_homepage/about.html')
 
 class ContactView(View):
 	def get(self, request):
-  		return render(request, 'homepage/contact.html')
+  		return render(request, 'app_homepage/contact.html')
 
 
 def showError404(request):

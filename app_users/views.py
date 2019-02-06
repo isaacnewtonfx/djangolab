@@ -1,3 +1,6 @@
+import datetime,os,shutil
+import pdb,pprint
+
 from django.http import HttpResponse,HttpResponseRedirect,Http404
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth import authenticate, login,logout
@@ -8,7 +11,6 @@ from . forms import LoginForm,RegistrationForm,ChangePasswordForm,PersonalDetail
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.utils.decorators import method_decorator
-import datetime,os,shutil
 from django.contrib import messages
 
 
@@ -30,10 +32,12 @@ from django.contrib import messages
 
 class LoginView(View):
     def get(self,request):  
-        return render(request, 'users/login.html')
+        return render(request, 'app_users/login.html')
 
 
     def post(self,request):
+
+        #pdb.set_trace()
 
     	# create a form instance and populate it with data from the request:
         form = LoginForm(request.POST,request = request)
@@ -54,13 +58,13 @@ class LoginView(View):
                     return HttpResponseRedirect('/')
                 else:
                     messages.add_message(request, messages.ERROR, "Sorry, this user is inactive")
-                    return render(request, 'users/public_login.html', {'loginform': form})
+                    return render(request, 'app_users/public_login.html', {'loginform': form})
             else:
                 messages.add_message(request, messages.ERROR, "invalid credentials or inactive user")
-                return render(request, 'users/login.html', {'loginform': form})
+                return render(request, 'app_users/login.html', {'loginform': form})
             return HttpResponseRedirect('/')
         else:
-        	return render(request, 'users/login.html', {'loginform': form})
+        	return render(request, 'app_users/login.html', {'loginform': form})
 
 
 class LogoutView(View):
@@ -75,7 +79,7 @@ class RegistrationView(View):
 
         #we need to pass an empty form because of the captcha field
         form = RegistrationForm()
-        return render(request, 'users/register.html', {'emptyForm':form})
+        return render(request, 'app_users/register.html', {'emptyForm':form})
 
     
     def post(self,request):
@@ -122,19 +126,19 @@ class RegistrationView(View):
             
             return HttpResponseRedirect('/')
         else:
-            return render(request, 'users/register.html', {'regform': form})
+            return render(request, 'app_users/register.html', {'regform': form})
 
 
 class ManageView(View):
     def get(self,request):
-        return render(request, 'users/manage.html')
+        return render(request, 'app_users/manage.html')
 
 
 class ChangeUserPasswordView(View):
     def get(self,request):
 
         data = {'show_change_password':True}
-        return render(request, 'users/manage.html', data)
+        return render(request, 'app_users/manage.html', data)
 
 
     def post(self,request):
@@ -160,7 +164,7 @@ class ChangeUserPasswordView(View):
             return HttpResponseRedirect('/users/manage/')
 
         else:
-            return render(request, 'users/manage.html', {'show_change_password':True,'change_password_form':form})
+            return render(request, 'app_users/manage.html', {'show_change_password':True,'change_password_form':form})
 
 
 class ManagePersonalDetailsView(View):
@@ -181,7 +185,7 @@ class ManagePersonalDetailsView(View):
         form = PersonalDetailsForm(initial = initial_data)
         data = {'form':form,'show_personal_details':True}
 
-        return render(request, 'users/manage.html', data)
+        return render(request, 'app_users/manage.html', data)
 
     def post(self,request):
 
@@ -218,4 +222,4 @@ class ManagePersonalDetailsView(View):
             return HttpResponseRedirect('/users/manage/')
             
         else:
-            return render(request, 'users/manage.html', {'form': form,'show_personal_details':True})
+            return render(request, 'app_users/manage.html', {'form': form,'show_personal_details':True})
