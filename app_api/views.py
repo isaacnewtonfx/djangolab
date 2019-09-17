@@ -1,9 +1,5 @@
-from django.core import serializers
-from django.http import HttpResponse, JsonResponse
-from app_contacts.models import Contact
 import json
-import urllib
-
+import urllib.request
 
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
@@ -13,37 +9,46 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer, Templat
 from .serializers import ContactSerializer, UserSerializer
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+from django.http import HttpResponse, JsonResponse
+
+from app_contacts.models import Contact
 
 
 # using core django API
 def contacts(request, response_type="json"):
 	if response_type == "json":
-		all_contacts = Contact.objects.values()
-		json_list = [entry for entry in all_contacts]
-		return HttpResponse(json.dumps(json_list), content_type='application/json')
+		# all_contacts = Contact.objects.values()
+		# json_list = [entry for entry in all_contacts]
+		# return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+		all_contacts = Contact.objects.all()
+		jsondata = serializers.serialize("json", all_contacts)
+		return HttpResponse(jsondata, content_type='application/json')
 	else:
 		all_contacts = Contact.objects.all()
 		xmldata = serializers.serialize("xml", all_contacts)
 		return HttpResponse(xmldata, content_type='application/xml')
 
-# using core django API
+# End using core django API
 
 
 def directions(request):
-	raw = urllib.urlopen("https://maps.googleapis.com/maps/api/directions/json?origin=5.562437405336545,-0.26535860355439134&destination=5.558849480325817,-0.21557680424489564&key=AIzaSyBOnqS14BIBk3IZKjzrvBRF4ITDYyfUvtU")
-	js = raw.readlines()
-	return HttpResponse(js)
+	response = urllib.request.urlopen("https://maps.googleapis.com/maps/api/directions/json?origin=5.562437405336545,-0.26535860355439134&destination=5.558849480325817,-0.21557680424489564&key=AIzaSyBOnqS14BIBk3IZKjzrvBRF4ITDYyfUvtU")
+	json = response.read()
+	return HttpResponse(json, content_type='application/json')
 
 
 # APIView Class defines the view behavior manually for the API,
-# and also appropriate for use when there is no intermediate business
+# and also appropriate for use when there is some intermediate business
 # logic to run before saving data
 class ContactList(APIView):
 	"""
     Retrieve all, and create new.
     """
-	# permission_classes = (permissions.IsAuthenticated,)
+	permission_classes = (permissions.DjangoModelPermissions,)
 	serializer_class = ContactSerializer
+	queryset = Contact.objects.none()
 
 	# /contact_list
 	def get(self, request, format=None):
@@ -53,8 +58,13 @@ class ContactList(APIView):
 
 	# /contact_list
 	def post(self, request, format=None):
-		serializer = ContactSerializer(data=request.data)
+		serializer = ContactSerializer(data=request.data, request=request)
 		if serializer.is_valid():
+
+			#serializer.validated_data['firstname'] = 'edited firstname'
+			#print(serializer.validated_data)
+			#print(request.data['lon'])
+			#print(request.data['lat'])
 
 			# Additional business logic code goes here
 
@@ -67,8 +77,9 @@ class ContactDetail(APIView):
 	"""
 	Retrieve, update or delete a contact.
 	"""
-	# permission_classes = (permissions.IsAuthenticated,)
+	permission_classes = (permissions.DjangoModelPermissions,)
 	serializer_class = ContactSerializer
+	queryset = Contact.objects.none()
 
 	def get_object(self, pk):
 		try:
@@ -121,9 +132,11 @@ class UserList(APIView):
 # ViewSets define the view behavior for (GET, POST, HEAD, OPTIONS) API, 
 # and also appropriate for use when there is no intermediate business logic to run before saving data
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
+	permission_classes = (permissions.DjangoModelPermissions,)
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all()
-    serializer_class = ContactSerializer
+	queryset = Contact.objects.all()
+	serializer_class = ContactSerializer
+	permission_classes = (permissions.DjangoModelPermissions,)

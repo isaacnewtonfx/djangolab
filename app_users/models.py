@@ -25,7 +25,7 @@ class UserProfile(models.Model):
 	middlename = models.CharField(max_length = 50,null=True,blank=True)
 	phone = models.CharField(max_length = 50,null=True,blank=True)
 	photo = models.ImageField(upload_to = only_filename, max_length=1000, null=True, blank=True)
-	old_photo_filename = 'default'
+	old_photo_filename = 'default.jpg'
 
 	# grab the initial photo filename and store it on this instance
 	def __init__(self, *args, **kwargs):
@@ -46,20 +46,24 @@ class UserProfile(models.Model):
 			resizedImage = image.resize((200, 200), Image.ANTIALIAS)
 			resizedImage.save(self.photo.path)
 			sourcepath = self.photo.path
-			destination_path = os.path.join(settings.BASE_DIR, 'media') + "/images/" + self.photo.name
+			destination_path = os.path.join(settings.BASE_DIR, 'media') + "/img/" + self.photo.name
 			shutil.move(sourcepath, destination_path)
 
 			# now delete old user photo from the userphotos directory if only its not the default photo
-			if self.old_photo_filename != "" and self.old_photo_filename != "default" and self.old_photo_filename is not None:
-				filepath = os.path.join(settings.BASE_DIR, 'media') + "/images/" + self.old_photo_filename
+			if self.old_photo_filename != "" and self.old_photo_filename != "default.jpg" and self.old_photo_filename is not None:
+				filepath = os.path.join(settings.BASE_DIR, 'media') + "/img/" + self.old_photo_filename
 				if( exists(filepath) ):
 					os.remove(filepath)
 
 
 	def image_tag(self):
-		return u'<img src="/media/images/%s" />' % (self.photo.name)
+		return u'<img src="/media/img/%s" />' % (self.photo.name)
 	image_tag.short_description = 'Image'
 	image_tag.allow_tags = True
+
+
+	class Meta:
+		db_table = 'userprofile'
 
 
 

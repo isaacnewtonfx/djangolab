@@ -25,6 +25,9 @@ class WorldBorder(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        db_table = 'worldborder'
+
 
 class places(models.Model):
     place_type = models.CharField(max_length=255, blank=True, null=True)
@@ -45,20 +48,5 @@ class places(models.Model):
     def __str__(self):
         return self.address
 
-
-# class PlacesIndex(DocType):
-#     place_type = Text()
-#     place_name = Text()
-#     admin1 = Text()
-#     admin2 = Text()
-#     admin3 = Text()
-#     floor = Text()
-#     room =Text()
-#     lon = Float()
-#     lat = Float()
-#     address = Text()
-#     geom = Text()
-    
-
-#     class Meta:
-#         index = 'places2'
+    class Meta:
+        db_table = 'places'

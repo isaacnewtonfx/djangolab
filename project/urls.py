@@ -1,15 +1,16 @@
-from django.urls import include,path
+from django.urls import include,path, re_path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 from rest_framework import routers
 from app_api import views 
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'contacts', views.ContactViewSet)
+router.register(r'usersapi', views.UserViewSet)
+router.register(r'contactsapi', views.ContactViewSet)
 
 #handler404 = 'app_homepage.views.showError404'
 #handler500 = 'app_homepage.views.showError500'
@@ -19,7 +20,7 @@ urlpatterns = [
     path('api/', include('app_api.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    path('', include('app_homepage.urls')),
+    path('home/', include('app_homepage.urls')),
     path('users/', include('app_users.urls')),
     path('captcha/', include('captcha.urls')), 
     path('contacts/', include('app_contacts.urls')),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('tasks/', include('app_tasks.urls')),
     path('chat/', include('app_chat.urls')),
     path('admin/', admin.site.urls),
+    re_path(r'^.*', TemplateView.as_view(template_name='react.html')),
     
 ] 
 

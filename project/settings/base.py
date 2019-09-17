@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
+import sys
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'app_geodjango',
     'app_lab',
     'app_tasks',    
+    'webpack_loader',
     'rest_framework',    
 
 ]
@@ -164,7 +165,7 @@ STATICFILES_DIRS = (
     # "/home/polls.com/polls/static",
     # "/opt/webfiles/common",
 
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'react'),
 )
 
 LOGIN_URL = '/users/login/'
@@ -196,9 +197,17 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
     
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+}
+
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
 }
