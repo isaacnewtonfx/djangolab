@@ -5,17 +5,24 @@ var BundleTracker = require('webpack-bundle-tracker')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-module.exports =  {
 
+module.exports = {
+
+  
+        watch : true,
+        mode : "development",
         context: path.join(__dirname, 'react', 'src'),
 
-        entry: {
-            main: 'index',
-        },
+        entry: [
+            'webpack-dev-server/client?http://127.0.0.1:3000',
+            'webpack/hot/only-dev-server',
+            'index'
+        ],
         output: {
-            path: path.resolve('./react/dist/'),
-            publicPath: '/static/dist/',
-            filename: '[name]-[chunkhash].js',
+            path: path.resolve('./react/dist/'),            
+            filename: '[name]-[hash].js',
+            publicPath: 'http://127.0.0.1:3000/react/dist/', // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
+
         },
         module: {
             rules: [
@@ -23,10 +30,14 @@ module.exports =  {
                 test: /\.js?$/,
                 exclude: /node_modules/,
                 use: [
-                {
-                    loader: 'babel-loader',
-                    options: {},  // babel-preset-env etc...
-                },
+                    {
+                        loader: 'react-hot-loader/webpack',
+                        options: {}
+                    },
+                    {
+                        loader: 'babel-loader',
+                        options: {},  // babel-preset-env etc...
+                    },
                 ],
             },
             {
@@ -43,7 +54,7 @@ module.exports =  {
                     loader: 'url-loader',
                     options: {
                     limit: 1000,
-                    name: '[path][name].[md5:hash:hex:12].[ext]',
+                    name: '[path][name].[hash].[ext]',
                     },
                 },
                 ],
@@ -56,9 +67,11 @@ module.exports =  {
             alias: {},
         },
         plugins: [
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(), // don't reload if there is an error
             new CleanWebpackPlugin(),
             new ExtractTextPlugin({
-                filename: '[name]-[md5:contenthash:hex:20].css',
+                filename: '[name]-[hash].css',
                 allChunks: true,
             }),
             new BundleTracker({
@@ -66,4 +79,15 @@ module.exports =  {
             }),
             new webpack.HashedModuleIdsPlugin(),
         ],
-    }
+
+        devServer: {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+              "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+            },
+            disableHostCheck: true
+          }
+    
+
+}
