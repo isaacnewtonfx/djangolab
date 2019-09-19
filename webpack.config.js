@@ -1,6 +1,7 @@
 /* global __dirname, process */
 var path = require('path')
 var webpack = require('webpack')
+var BundleTracker = require('webpack-bundle-tracker')
 
 module.exports = {
 
@@ -73,6 +74,9 @@ module.exports = {
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoEmitOnErrorsPlugin(), // don't reload if there is an error
             new webpack.HashedModuleIdsPlugin(),
+            new BundleTracker({
+                filename: './webpack-stats.json',
+            }),
         ]
 
 }
