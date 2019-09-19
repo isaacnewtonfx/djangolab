@@ -1,15 +1,19 @@
 var webpack = require('webpack')
 var WebpackDevServer = require('webpack-dev-server')
-var config = require('./webpack.config.hmr')
+var config = require('./webpack.config')
 
-
-//console.log(config)
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
   inline: true,
-  historyApiFallback: true
+  historyApiFallback: true,
+  port: 3000,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+  }
+
 }).listen(3000, '0.0.0.0', function (err, result) {
   if (err) {
     console.log(err)
