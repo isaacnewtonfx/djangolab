@@ -1,2 +1,4 @@
 node_modules
 package-lock.json
+webpack-stats-dev.json
+webpack-stats-prod.json

@@ -7,13 +7,13 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports =  {
 
-        context: path.join(__dirname, 'react', 'src'),
+        context: path.join(__dirname, 'reactjs', 'src'),
 
         entry: {
             main: 'index',
         },
         output: {
-            path: path.resolve('./react/dist/'),
+            path: path.resolve('./reactjs/dist/'),
             publicPath: '/static/dist/',
             filename: '[name]-[chunkhash].js',
         },
@@ -59,7 +59,7 @@ module.exports =  {
         },
         resolve: {
             extensions: ['.js', '.jsx'],
-            modules: ['react/src/', 'node_modules'],
+            modules: ['reactjs/src/', 'node_modules'],
             alias: {},
         },
         plugins: [
@@ -69,7 +69,7 @@ module.exports =  {
                 allChunks: true,
             }),
             new BundleTracker({
-                filename: './webpack-stats.json',
+                filename: './webpack-stats-prod.json',
             }),
             new webpack.HashedModuleIdsPlugin(),
         ],

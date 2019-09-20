@@ -13,7 +13,7 @@ import sys
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,6 +24,9 @@ SECRET_KEY = '79m_ux2jm!r@_7a5vp3i6^%eex4am!em-(-h-a6s)(5^zstsx('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# WARNING: Specify frontend assets serving mode. Don't run with WEBPACK_HMR turned on in production!
+WEBPACK_HMR = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -52,7 +55,7 @@ INSTALLED_APPS = [
     'captcha',
     'xhtml2pdf',
     'password_reset',
-    'app_homepage',
+    'app_homepage.apps.AppHomepageConfig',
     'app_users',
     'app_contacts',
     'app_api',
@@ -157,7 +160,7 @@ USE_TZ = True
 
 # Media is for any user upload files(img,pdf,videos etc)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/var/www/contacts.test/media/'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media_root')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -165,7 +168,7 @@ MEDIA_ROOT = '/var/www/contacts.test/media/'
 
 #STATIC_URL = 'https://storage.googleapis.com/enhanced-rite-200319/static/'
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/contacts.test/static_root/'
+STATIC_ROOT =  os.path.join(BASE_DIR, 'static_root')
 
 #staticfiles_dirs is additional directories to search for static files
 STATICFILES_DIRS = (
@@ -173,7 +176,9 @@ STATICFILES_DIRS = (
     # "/home/polls.com/polls/static",
     # "/opt/webfiles/common",
 
-    os.path.join(BASE_DIR, 'react'),
+    os.path.join(BASE_DIR, 'reactjs'),
+    os.path.join(BASE_DIR, 'static'),
+    
 )
 
 LOGIN_URL = '/users/login/'
@@ -213,9 +218,10 @@ REST_FRAMEWORK = {
 }
 
 
+stats_filename = 'webpack-stats-dev.json' if WEBPACK_HMR else 'webpack-stats-prod.json'
 WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'dist/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    }
+        'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'dist/',
+            'STATS_FILE': os.path.join(BASE_DIR, stats_filename),
+        }
 }

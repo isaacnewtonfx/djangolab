@@ -7,7 +7,7 @@ module.exports = {
 
         watch : true,
         mode : "development",
-        context: path.join(__dirname, 'react', 'src'),
+        context: path.join(__dirname, 'reactjs', 'src'),
 
         entry: [
             'webpack-dev-server/client?http://127.0.0.1:3000',
@@ -15,9 +15,9 @@ module.exports = {
             'index'
         ],
         output: {
-            path: path.resolve('./react/dist/'),            
+            path: path.resolve('./reactjs/dist/'),            
             filename: '[name]-[hash].js',
-            publicPath: 'http://127.0.0.1:3000/react/dist/', // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
+            publicPath: 'http://127.0.0.1:3000/reactjs/dist/', // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
 
         },
         module: {
@@ -27,7 +27,7 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: 'react-hot-loader/webpack',
+                        loader: 'reactjs-hot-loader/webpack',
                         options: {}
                     },
                     {
@@ -67,7 +67,7 @@ module.exports = {
         },
         resolve: {
             extensions: ['.js', '.jsx'],
-            modules: ['react/src/', 'node_modules'],
+            modules: ['reactjs/src/', 'node_modules'],
             alias: {},
         },
         plugins: [
@@ -75,7 +75,7 @@ module.exports = {
             new webpack.NoEmitOnErrorsPlugin(), // don't reload if there is an error
             new webpack.HashedModuleIdsPlugin(),
             new BundleTracker({
-                filename: './webpack-stats.json',
+                filename: './webpack-stats-dev.json',
             }),
         ]
 
