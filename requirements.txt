@@ -14,7 +14,7 @@ kombu==4.2.2.post1
 mod-wsgi==4.6.4
 Pillow==5.1.0
 psycopg2==2.7.3.2
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 python-dateutil==2.7.5
 pytz==2017.3
 reportlab==3.4.0
